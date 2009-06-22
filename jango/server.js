@@ -3,6 +3,8 @@ const GLib = imports.gi.GLib;
 
 const Lang = imports.lang;
 
+GLib.thread_init(null);
+
 function HTTPServer(args) {
   this._init(args);
 }
@@ -23,7 +25,7 @@ HTTPServer.prototype = {
     },
 
     _startServer : function() {
-        server = new Soup.Server({ port: this._port});
+        let server = new Soup.Server({ port: this._port});
         server.connect("request-started",
                        Lang.bind(this, this._onRequestStarted));
         server.connect("request-finished",
@@ -119,16 +121,3 @@ HTTPResponse.prototype = {
       return this._status;
    }
 };
-
-let main = function() {
-   GLib.thread_init(null);
-   let handler = function(request) {
-       return new HTTPResponse('Index page<br><a href="/hello">Say hi</a>\n', undefined, 200);
-   };
-   let server = new HTTPServer({ port: 1080 });
-   server.addHandler("^/$", handler);
-   server.addHandler("^/hello$", function() new HTTPResponse('Hello!<br><a href="/">Go back</a>'));
-   server.run();
-}
-
-main();
