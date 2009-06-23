@@ -1,9 +1,10 @@
 #!/usr/bin/env gjs-console
-
-const HTTPServer = imports.jango.server.HTTPServer;
-const HTTPResponse = imports.jango.server.HTTPResponse;
+const GLib = imports.gi.GLib;
 
 let runserver = function(args) {
+    const HTTPServer = imports.jango.server.HTTPServer;
+    const HTTPResponse = imports.jango.server.HTTPResponse;
+
     let SERVER_PORT = 1080;
     let handler = function(request) {
         return new HTTPResponse('Index page<br><a href="/hello">Say hi</a>\n', undefined, 200);
@@ -25,6 +26,14 @@ let main = function(args) {
     if (args.length == 0) {
         log("Usage manage command <options>");
         return;
+    }
+    try {
+        const settings = imports.settings;
+    } catch (e) {
+        if (e.message == "No JS module 'settings' found in search path") {
+            log("Error 'settings.js' not found");
+            return;
+        }
     }
     let command = args[0];
     switch (command) {
