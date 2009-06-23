@@ -16,6 +16,11 @@ let runserver = function(args) {
     server.run();
 }
 
+let shell = function(args) {
+    const Console = imports.console;
+    Console.interact();
+}
+
 let main = function(args) {
     if (args.length == 0) {
         log("Usage manage command <options>");
@@ -24,7 +29,10 @@ let main = function(args) {
     let command = args[0];
     switch (command) {
         case 'runserver':
-            runserver();
+            runserver(args);
+            break;
+        case 'shell':
+            shell(args);
             break;
         default:
             log("Unknown command: " + args);
