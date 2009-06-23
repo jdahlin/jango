@@ -2,8 +2,12 @@
 const GLib = imports.gi.GLib;
 
 let runserver = function(args) {
+    const Settings = imports.jango.settings;
     const HTTPServer = imports.jango.server.HTTPServer;
-    const HTTPResponse = imports.jango.server.HTTPResponse;
+
+    let settings = Settings.getSettings();
+    if (!settings)
+        return;
 
     let SERVER_PORT = 1080;
     let handler = function(request) {
@@ -27,14 +31,7 @@ let main = function(args) {
         log("Usage manage command <options>");
         return;
     }
-    try {
-        const settings = imports.settings;
-    } catch (e) {
-        if (e.message == "No JS module 'settings' found in search path") {
-            log("Error 'settings.js' not found");
-            return;
-        }
-    }
+
     let command = args[0];
     switch (command) {
         case 'runserver':
