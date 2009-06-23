@@ -3,7 +3,7 @@
 const HTTPServer = imports.jango.server.HTTPServer;
 const HTTPResponse = imports.jango.server.HTTPResponse;
 
-let manage = function() {
+let runserver = function(args) {
     let SERVER_PORT = 1080;
     let handler = function(request) {
         return new HTTPResponse('Index page<br><a href="/hello">Say hi</a>\n', undefined, 200);
@@ -16,4 +16,20 @@ let manage = function() {
     server.run();
 }
 
-manage();
+let main = function(args) {
+    if (args.length == 0) {
+        log("Usage manage command <options>");
+        return;
+    }
+    let command = args[0];
+    switch (command) {
+        case 'runserver':
+            runserver();
+            break;
+        default:
+            log("Unknown command: " + args);
+            break;
+    }
+};
+
+main(ARGV);
